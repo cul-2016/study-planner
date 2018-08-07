@@ -7,9 +7,11 @@ import List from './List.js';
 const App = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Home}/>
-      <Route path="/add-assessment" component={AddAssessment}/>
-      <Route path="/list-assessments" component={List}/>
+      <div className="container">
+        <Route exact path="/" component={Home}/>
+        <Route path="/add-assessment" component={AddAssessment}/>
+        <Route path="/list-assessments" component={List}/>
+      </div>
     </Switch>
   )
 }

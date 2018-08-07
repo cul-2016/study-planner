@@ -22,6 +22,7 @@ class AddAssessment extends Component {
   render() {
     return (
       <Fragment>
+        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
         <h1>Add Assessment</h1>
         <h2>Name</h2>
         <input
@@ -36,7 +37,7 @@ class AddAssessment extends Component {
           onDateChange={date => this.setState({ date })}
           focused={this.state.focused}
           onFocusChange={({ focused }) => this.setState({ focused })}
-          id="your_unique_id"
+          id="datepicker"
           numberOfMonths={3}
           displayFormat="DD/MM/YYYY"
         />
