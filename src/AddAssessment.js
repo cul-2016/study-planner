@@ -19,9 +19,14 @@ class AddAssessment extends Component {
     this.setState(newState);
   }
 
+  addAssessment () {
+    this.props.addAssessment(this.state);
+    this.props.history.push("/list-assessments");
+  }
+
   render() {
     return (
-      <Fragment>
+      <div>
         <button onClick={this.props.history.goBack}>{"<- Back"}</button>
         <h1>Add Assessment</h1>
         <h2>Name</h2>
@@ -53,8 +58,8 @@ class AddAssessment extends Component {
             return <RadioButton value={(i+1).toString()} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
-        <button>Add Assessment</button>
-      </Fragment>
+        <button onClick={this.addAssessment.bind(this)}>Add Assessment</button>
+      </div>
     )
   }
 }

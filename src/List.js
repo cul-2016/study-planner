@@ -9,11 +9,7 @@ class List extends Component {
         <button onClick={this.props.history.goBack}>{"<- Back"}</button>
         <h1>Assessments</h1>
         {
-          [
-            {name: "Psychology", type: "Exam"},
-            {name: "Maths", type: "Exam"},
-            {name: "English", type: "Coursework"}
-          ].map((v,i) => {
+          this.props.assessments.map((v,i) => {
             return <AssessmentCompletion key={i} assessmentName={v.name} type={v.type} />
           })
         }

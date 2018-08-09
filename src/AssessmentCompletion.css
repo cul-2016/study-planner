@@ -35,3 +35,9 @@
   border-color: rgba(255, 0, 255, 1);
   background-color: rgba(255, 0, 255, 0.25);
 }
+
+@media screen and (max-width: 60em) {
+  .completion {
+    width: 80%;
+  }
+}
