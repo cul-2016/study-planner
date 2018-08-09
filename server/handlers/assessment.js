@@ -25,6 +25,32 @@ async function add(request, h) {
   });
 }
 
+async function list(request, h) {
+  var params = {
+    ExpressionAttributeValues: {
+      ":v1": {
+       S: "TEST" // TODO: replace with user id
+      }
+    },
+    KeyConditionExpression: "UserId = :v1",
+    TableName: process.env.DYNAMO_TABLE_NAME
+  };
+
+ return await dynamoDB.query(params).promise()
+ .then(res => {
+   return {ok: true, assessments: res.Items.map(e => {
+     return {
+       name: e.Name.S,
+       type: e.Type.S
+     }
+   })};
+ })
+ .catch(err => {
+   return err
+ });
+}
+
 module.exports = {
-  add
+  add,
+  list
 };
