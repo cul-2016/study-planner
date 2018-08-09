@@ -17,18 +17,12 @@ class App extends Component {
     }
   }
 
-  addAssessment(assessment) {
-    let assessments = this.state.assessments;
-    assessments.push(assessment);
-    this.setState({assessments});
-  }
-
   render () {
     return (
       <Switch>
         <div className="container">
           <Route exact path="/" component={Home}/>
-          <Route path="/add-assessment" render={(props) => <AddAssessment {...props} addAssessment={this.addAssessment.bind(this)}/>}/>
+          <Route path="/add-assessment" component={AddAssessment}/>
           <Route path="/list-assessments" render={(props) => <List {...props} assessments={this.state.assessments}/>}/>
           <Route path="/details/:assessment" component={Details} />
         </div>

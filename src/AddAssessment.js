@@ -20,8 +20,20 @@ class AddAssessment extends Component {
   }
 
   addAssessment () {
-    this.props.addAssessment(this.state);
-    this.props.history.push("/list-assessments");
+    let init = {
+      method: 'POST',
+      body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
+    };
+
+    fetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
+      .then(res => res.json())
+      .then(result => {
+        if (!result.ok) {
+          throw Error(result.message);
+        }
+        this.props.history.replace("/list-assessments");
+      })
+      .catch(error => console.log(error));
   }
 
   render() {
