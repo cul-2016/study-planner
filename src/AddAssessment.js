@@ -4,6 +4,9 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 
+const priorities = ["Very Low", "Low", "Medium", "High", "Very High"];
+const assessmentTypes = ["Exam", "Coursework"];
+
 class AddAssessment extends Component {
     state = {
       date: null,
@@ -42,13 +45,13 @@ class AddAssessment extends Component {
         />
         <h2>Type of Assessment</h2>
         <RadioGroup onChange={ selected => this.setState({type: selected}) } horizontal>
-          {["Exam", "Coursework"].map((v, i) => {
+          {assessmentTypes.map((v, i) => {
             return <RadioButton value={v.toLowerCase()} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
         <h2>Priority</h2>
         <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal>
-          {["Very Low", "Low", "Medium", "High", "Very High"].map((v, i) => {
+          {priorities.map((v, i) => {
             return <RadioButton value={(i+1).toString()} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
