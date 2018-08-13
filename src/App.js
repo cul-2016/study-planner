@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Home from './Home.js';
-import AddAssessment from './AddAssessment.js';
-import List from './List.js';
-import Details from './Details.js';
+import Home from './Components/Home.js';
+import AddAssessment from './Components/AddAssessment.js';
+import List from './Components/List.js';
+import Details from './Components/Details.js';
 
 class App extends Component {
   render () {
