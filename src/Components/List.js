@@ -25,8 +25,7 @@ class List extends Component {
   render() {
     return (
       <Fragment>
-        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
-        <h1>Assessments</h1>
+        <h2>Assessment Targets</h2>
         {
           this.state.assessments.map((v,i) => {
             return <AssessmentCompletion key={i} assessment={v} />

@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import  { Link } from 'react-router-dom';
 
+import List from './List.js';
+
 class Home extends Component {
   state = {
     scheduledTime: 6
@@ -22,7 +24,7 @@ class Home extends Component {
           <Link to="/add-assessment">Add assessment</Link>
         </div>
         <div>
-          <Link to="/list-assessments">View assessment targets</Link>
+          <List />
         </div>
       </Fragment>
     );
