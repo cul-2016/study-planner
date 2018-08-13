@@ -6,10 +6,11 @@ class Details extends Component {
     const assessment = this.props.location.state;
     return (
       <Fragment>
-        <div>{assessment.name} {assessment.type}</div>
-        <div>6 hours 0% Complete</div>
+        <button className="button back-button" onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <h1>{assessment.name} {assessment.type}</h1>
+        <div className="mb1">6 hours 0% Complete</div>
         <Link to={{pathname: `/timer/${assessment.name}`, state: assessment}}>
-          <button>Work on this Assessment</button>
+          <button className="button">Work on this Assessment</button>
         </Link>
       </Fragment>
     )

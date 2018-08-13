@@ -20,8 +20,10 @@ class Home extends Component {
           value={this.state.scheduledTime}
           onChange={(e) => this.setState({scheduledTime: e.target.value})}
         /> hours this week</p>
-        <div>
-          <Link to="/add-assessment">Add assessment</Link>
+        <div className="tc">
+          <Link to="/add-assessment">
+            <button className="button">Add assessment</button>
+          </Link>
         </div>
         <div>
           <List />
