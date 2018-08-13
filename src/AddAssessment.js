@@ -3,6 +3,7 @@ import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { Link } from 'react-router-dom';
 
 const priorities = ["Very Low", "Low", "Medium", "High", "Very High"];
 const assessmentTypes = ["Exam", "Coursework"];
@@ -22,7 +23,7 @@ class AddAssessment extends Component {
     this.setState(newState);
   }
 
-  addAssessment () {
+  addAssessment = () => {
     this.props.addAssessment(this.state);
     this.props.history.push("/list-assessments");
   }
@@ -30,7 +31,9 @@ class AddAssessment extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <Link to="/">
+          <button>{"<- Back"}</button>
+        </Link>
         <h1>Add Assessment</h1>
         <h2>Name</h2>
         <input
@@ -58,10 +61,10 @@ class AddAssessment extends Component {
         <h2>Priority</h2>
         <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal>
           {priorities.map((v, i) => {
-            return <RadioButton value={(i+1).toString()} key={i}>{v}</RadioButton>
+            return <RadioButton value={`${i+1}`} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
-        <button onClick={this.addAssessment.bind(this)}>Add Assessment</button>
+        <button onClick={this.addAssessment}>Add Assessment</button>
       </div>
     )
   }
