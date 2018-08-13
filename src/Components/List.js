@@ -11,7 +11,7 @@ class List extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/assessment`)
+    fetch(`/assessment`)
     .then(res => res.json())
     .then(result => {
       if (!result.ok) {

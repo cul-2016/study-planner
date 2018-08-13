@@ -29,7 +29,7 @@ class AddAssessment extends Component {
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
 
-    fetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
+    fetch(`/assessment`, init)
       .then(res => res.json())
       .then(result => {
         if (!result.ok) {
