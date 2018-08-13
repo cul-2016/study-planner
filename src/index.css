@@ -3,3 +3,13 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.container {
+  margin: auto;
+  margin-top: 1em;
+  width: 80%;
+}
+
+.schedule-input {
+    width: 3em;
+}
