@@ -5,6 +5,10 @@ const dynamoDB = new AWS.DynamoDB({region: 'eu-west-2', endpoint: ep});
 async function add(request, h) {
   const {user_id, name, priority, date, type} = JSON.parse(request.payload);
 
+  if (!user_id || !name || !priority || !date || !type) {
+    return new Error("missing required params");
+  }
+
   let params = {
     'UserId': { S: user_id },
     'Name': { S: name },
