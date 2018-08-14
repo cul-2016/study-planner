@@ -2,6 +2,8 @@
   "name": "study-planner",
   "version": "0.1.0",
   "dependencies": {
+    "hapi": "^17.5.3",
+    "inert": "^5.1.0",
     "moment": "^2.22.2",
     "react": "^16.4.2",
     "react-dates": "^17.1.1",
