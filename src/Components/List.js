@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
 import AssessmentCompletion from './AssessmentCompletion';
 
@@ -25,7 +26,9 @@ class List extends Component {
   render() {
     return (
       <Fragment>
-        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <Link to="/">
+          <button>{"<- Back"}</button>
+        </Link>
         <h1>Assessments</h1>
         {
           this.state.assessments.map((v,i) => {
