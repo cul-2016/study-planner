@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { SingleDatePicker } from 'react-dates';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { Link } from 'react-router-dom';
+import handleFetch from '../helpers/handleFetch.js';
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -30,15 +31,10 @@ class AddAssessment extends Component {
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
 
-    fetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
-      .then(res => res.json())
-      .then(result => {
-        if (!result.ok) {
-          throw Error(result.message);
-        }
-        this.props.history.replace("/list-assessments");
-      })
-      .catch(error => console.log(error));
+    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
+    .then(() => {
+      this.props.history.replace("/list-assessments")
+    })
   }
 
   render() {
