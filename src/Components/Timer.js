@@ -55,7 +55,7 @@ class Timer extends Component {
     }
 
     fetch('/log-time', init)
-    .then(() => this.pauseTimer())
+    .then(() => clearInterval(this.timer))
   }
 
   render() {

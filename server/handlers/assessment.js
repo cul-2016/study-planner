@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
-var ep = new AWS.Endpoint(process.env.DYNAMO_ENDPOINT);
+const ep = new AWS.Endpoint(process.env.DYNAMO_ENDPOINT);
 const dynamoDB = new AWS.DynamoDB({region: 'eu-west-2', endpoint: ep});
+const moment = require('moment');
 
 async function add(request, h) {
   const payload = typeof request.payload === "string"
@@ -19,8 +20,12 @@ async function add(request, h) {
     'Priority': { N: priority },
     'DueDate': { S: date },
     'Type': { S: type },
-    'ElapsedTime': { N: 0 }
+    'Weeks': { M: {} }
   };
+
+  params.Weeks.M[getCurrentWeek()] = {
+    M: { 'Target': { N: `${6 * 60}`}, 'ElapsedTime': { N: '0' } } // TODO: Use algorithm to determine target
+  }
 
   return await dynamoDB.putItem({
     TableName: process.env.DYNAMO_TABLE_NAME,
@@ -74,7 +79,10 @@ async function logTime(request, h) {
       "Name": { S: name },
       "UserId": { S: user_id } // TODO: replace with user id
     },
-    UpdateExpression: 'ADD ElapsedTime :e',
+    UpdateExpression: 'ADD Weeks.#WEEK.ElapsedTime :e',
+    ExpressionAttributeNames: {
+      '#WEEK': getCurrentWeek()
+    },
     ExpressionAttributeValues: {
       ':e': { N: elapsed_time }
     },
@@ -89,6 +97,15 @@ async function logTime(request, h) {
     console.log(err);
     return err
   });
+}
+
+/*
+Returns the date of the Monday of the current week
+*/
+function getCurrentWeek() {
+  const currentWeek = moment().startOf('isoweek');
+
+  return `${currentWeek.year()}-${currentWeek.month() + 1}-${currentWeek.date()}`
 }
 
 module.exports = {
