@@ -31,7 +31,7 @@ class AddAssessment extends Component {
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
 
-    fetch(`/assessment`, init)
+    handleFetch(`/assessment`, init)
     .then(() => this.props.history.replace("/"))
   }
 

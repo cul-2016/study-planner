@@ -13,12 +13,13 @@ async function add(request, h) {
     return new Error("missing required params");
   }
 
-  let params = {
+  const params = {
     'UserId': { S: user_id },
     'Name': { S: name },
     'Priority': { N: priority },
     'DueDate': { S: date },
-    'Type': { S: type }
+    'Type': { S: type },
+    'ElapsedTime': { N: 0 }
   };
 
   return await dynamoDB.putItem({
@@ -35,7 +36,7 @@ async function add(request, h) {
 }
 
 async function list(request, h) {
-  var params = {
+  const params = {
     ExpressionAttributeValues: {
       ":v1": {
        S: "TEST" // TODO: replace with user id
@@ -48,6 +49,7 @@ async function list(request, h) {
  return await dynamoDB.query(params).promise()
  .then(res => {
    return {ok: true, assessments: res.Items.map(e => {
+     console.log(e);
      return {
        name: e.Name.S,
        type: e.Type.S
@@ -60,7 +62,37 @@ async function list(request, h) {
  });
 }
 
+async function logTime(request, h) {
+  const payload = typeof request.payload === "string"
+    ? JSON.parse(request.payload)
+    : request.payload;
+
+  const {user_id, name, elapsed_time} = payload;
+
+  const params = {
+    Key: {
+      "Name": { S: name },
+      "UserId": { S: user_id } // TODO: replace with user id
+    },
+    UpdateExpression: 'ADD ElapsedTime :e',
+    ExpressionAttributeValues: {
+      ':e': { N: elapsed_time }
+    },
+    TableName: process.env.DYNAMO_TABLE_NAME
+  }
+
+  return await dynamoDB.updateItem(params).promise()
+  .then(res => {
+    return {ok: true}
+  })
+  .catch(err => {
+    console.log(err);
+    return err
+  });
+}
+
 module.exports = {
   add,
-  list
+  list,
+  logTime
 };
