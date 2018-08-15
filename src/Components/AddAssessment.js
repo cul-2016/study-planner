@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { SingleDatePicker } from 'react-dates';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { Link } from 'react-router-dom';
+import handleFetch from '../helpers/handleFetch.js';
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -23,21 +25,14 @@ class AddAssessment extends Component {
     this.setState(newState);
   }
 
-  addAssessment () {
+  addAssessment = () => {
     let init = {
       method: 'POST',
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
 
     fetch(`/assessment`, init)
-      .then(res => res.json())
-      .then(result => {
-        if (!result.ok) {
-          throw Error(result.message);
-        }
-        this.props.history.replace("/");
-      })
-      .catch(error => console.log(error));
+    .then(() => this.props.history.replace("/"))
   }
 
   render() {
@@ -72,11 +67,11 @@ class AddAssessment extends Component {
         <h2>Priority</h2>
         <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal={false}>
           {priorities.map((v, i) => {
-            return <RadioButton pointColor="#2574A9" value={(i+1).toString()} key={i}>{v}</RadioButton>
+            return <RadioButton pointColor="#2574A9" value={`${i+1}`} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
         <div className="tc">
-          <button className="button" onClick={this.addAssessment.bind(this)}>Add Assessment</button>
+          <button className="button" onClick={this.addAssessment}>Add Assessment</button>
         </div>
       </div>
     )

@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
-import AssessmentCompletion from './AssessmentCompletion';
+import AssessmentCompletion from './AssessmentCompletion.js';
+import handleFetch from '../helpers/handleFetch.js';
 
 class List extends Component {
   constructor(props) {
@@ -12,14 +14,9 @@ class List extends Component {
 
   componentDidMount() {
     fetch(`/assessment`)
-    .then(res => res.json())
     .then(result => {
-      if (!result.ok) {
-        throw Error(result.message);
-      }
       this.setState({assessments: result.assessments});
     })
-    .catch(err => console.log(err));
   }
 
   render() {
