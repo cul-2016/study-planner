@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
-import 'react-dates/lib/css/_datepicker.css';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { Link } from 'react-router-dom';
+import handleFetch from '../helpers/handleFetch.js';
+
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 const priorities = ["Very Low", "Low", "Medium", "High", "Very High"];
 const assessmentTypes = ["Exam", "Coursework"];
@@ -24,8 +26,15 @@ class AddAssessment extends Component {
   }
 
   addAssessment = () => {
-    this.props.addAssessment(this.state);
-    this.props.history.push("/list-assessments");
+    let init = {
+      method: 'POST',
+      body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
+    };
+
+    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
+    .then(() => {
+      this.props.history.replace("/list-assessments")
+    })
   }
 
   render() {

@@ -1,4 +1,5 @@
 const Path = require('path');
+const handlers = require('./handlers');
 
 module.exports = [
   {
@@ -11,5 +12,15 @@ module.exports = [
         index: true
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/assessment',
+    handler: handlers.assessment.add
+  },
+  {
+    method: 'GET',
+    path: '/assessment',
+    handler: handlers.assessment.list
   }
 ]
