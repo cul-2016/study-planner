@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
-import AssessmentCompletion from './AssessmentCompletion';
+import AssessmentCompletion from './AssessmentCompletion.js';
+import handleFetch from '../helpers/handleFetch.js';
 
 class List extends Component {
   constructor(props) {
@@ -11,21 +13,18 @@ class List extends Component {
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/assessment`)
-    .then(res => res.json())
+    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`)
     .then(result => {
-      if (!result.ok) {
-        throw Error(result.message);
-      }
       this.setState({assessments: result.assessments});
     })
-    .catch(err => console.log(err));
   }
 
   render() {
     return (
       <Fragment>
-        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <Link to="/">
+          <button>{"<- Back"}</button>
+        </Link>
         <h1>Assessments</h1>
         {
           this.state.assessments.map((v,i) => {

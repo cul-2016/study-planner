@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { SingleDatePicker } from 'react-dates';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { Link } from 'react-router-dom';
+import handleFetch from '../helpers/handleFetch.js';
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -23,27 +25,24 @@ class AddAssessment extends Component {
     this.setState(newState);
   }
 
-  addAssessment () {
+  addAssessment = () => {
     let init = {
       method: 'POST',
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
 
-    fetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
-      .then(res => res.json())
-      .then(result => {
-        if (!result.ok) {
-          throw Error(result.message);
-        }
-        this.props.history.replace("/list-assessments");
-      })
-      .catch(error => console.log(error));
+    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
+    .then(() => {
+      this.props.history.replace("/list-assessments")
+    })
   }
 
   render() {
     return (
       <div>
-        <button onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <Link to="/">
+          <button>{"<- Back"}</button>
+        </Link>
         <h1>Add Assessment</h1>
         <h2>Name</h2>
         <input
@@ -71,10 +70,10 @@ class AddAssessment extends Component {
         <h2>Priority</h2>
         <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal>
           {priorities.map((v, i) => {
-            return <RadioButton value={(i+1).toString()} key={i}>{v}</RadioButton>
+            return <RadioButton value={`${i+1}`} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
-        <button onClick={this.addAssessment.bind(this)}>Add Assessment</button>
+        <button onClick={this.addAssessment}>Add Assessment</button>
       </div>
     )
   }
