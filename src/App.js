@@ -1,36 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Home from './Home.js';
-import AddAssessment from './AddAssessment.js';
-import List from './List.js';
-import Details from './Details.js';
+import Home from './Components/Home.js';
+import AddAssessment from './Components/AddAssessment.js';
+import List from './Components/List.js';
+import Details from './Components/Details.js';
+import Timer from './Components/Timer.js';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      assessments: [
-        {name: "Psychology", type: "Exam"},
-        {name: "Maths", type: "Exam"},
-        {name: "English", type: "Coursework"}
-      ]
-    }
-  }
-
-  addAssessment = (assessment) => {
-    let assessments = this.state.assessments;
-    assessments.push(assessment);
-    this.setState({assessments});
-  }
-
   render () {
     return (
       <Switch>
         <div className="container">
           <Route exact path="/" component={Home}/>
-          <Route path="/add-assessment" render={(props) => <AddAssessment {...props} addAssessment={this.addAssessment}/>}/>
-          <Route path="/list-assessments" render={(props) => <List {...props} assessments={this.state.assessments}/>}/>
+          <Route path="/add-assessment" component={AddAssessment}/>
           <Route path="/details/:assessment" component={Details} />
+          <Route path="/timer/:assessment" component={Timer} />
         </div>
       </Switch>
     )
