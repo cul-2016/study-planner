@@ -1,7 +1,11 @@
 const AWS = require('aws-sdk');
+const moment = require('moment');
+
+const getTarget = require('../helpers/getTarget.js');
+
 const ep = new AWS.Endpoint(process.env.DYNAMO_ENDPOINT);
 const dynamoDB = new AWS.DynamoDB({region: 'eu-west-2', endpoint: ep});
-const moment = require('moment');
+
 
 async function add(request, h) {
   const payload = typeof request.payload === "string"
@@ -24,7 +28,7 @@ async function add(request, h) {
   };
 
   params.Weeks.M[getCurrentWeek()] = {
-    M: { 'Target': { N: `${6 * 60}`}, 'ElapsedTime': { N: '0' } } // TODO: Use algorithm to determine target
+    M: { 'Target': { N: `${getTarget()}`}, 'ElapsedTime': { N: '0' } } // TODO: Use algorithm to determine target
   }
 
   return await dynamoDB.putItem({
@@ -54,10 +58,14 @@ async function list(request, h) {
  return await dynamoDB.query(params).promise()
  .then(res => {
    return {ok: true, assessments: res.Items.map(e => {
-     console.log(e);
+     const target = e.Weeks.M[getCurrentWeek()] ? e.Weeks.M[getCurrentWeek()].M.Target.N : getTarget();
+     const complete = e.Weeks.M[getCurrentWeek()] ? e.Weeks.M[getCurrentWeek()].M.ElapsedTime.N : 0;
+
      return {
        name: e.Name.S,
-       type: e.Type.S
+       type: e.Type.S,
+       target: target,
+       complete: complete
      }
    })};
  })

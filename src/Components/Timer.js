@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import handleFetch from '../helpers/handleFetch.js';
 
 const initialTime = 30 * 60 * 1000; // Set timer to 30 minutes
 
@@ -54,7 +55,7 @@ class Timer extends Component {
       body: JSON.stringify({name: this.assessment.name, user_id: 'TEST', elapsed_time: `${this.elapsedTime()}`})
     }
 
-    fetch('/log-time', init)
+    handleFetch('/log-time', init)
     .then(() => clearInterval(this.timer))
   }
 

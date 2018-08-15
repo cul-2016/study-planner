@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import  { Link } from 'react-router-dom';
+import calculateCompletion from '../helpers/calculateCompletion.js';
 
 class AssessmentCompletion extends Component {
   render() {
@@ -8,7 +9,7 @@ class AssessmentCompletion extends Component {
       <Link to={{pathname: `/details/${assessment.name}`, state: assessment}}>
         <div className={`completion ${this.getRandomColour()}-target`}>
           <div>{assessment.name} {assessment.type}</div>
-          <div>6 hours 0% Complete</div>
+          <div>{assessment.target / 60} hours {calculateCompletion(assessment.target, assessment.complete)}% Complete</div>
         </div>
       </Link>
     )
