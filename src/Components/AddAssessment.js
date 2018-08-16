@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { SingleDatePicker } from 'react-dates';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { Link } from 'react-router-dom';

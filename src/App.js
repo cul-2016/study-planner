@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Home from './Components/Home.js';
 import AddAssessment from './Components/AddAssessment.js';
 import List from './Components/List.js';
 import Details from './Components/Details.js';
+import Timer from './Components/Timer.js';
 
 class App extends Component {
   render () {
@@ -14,6 +15,7 @@ class App extends Component {
           <Route path="/add-assessment" component={AddAssessment}/>
           <Route path="/list-assessments" component={List}/>
           <Route path="/details/:assessment" component={Details} />
+          <Route path="/timer/:assessment" component={Timer} />
         </div>
       </Switch>
     )

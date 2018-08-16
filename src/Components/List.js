@@ -28,7 +28,7 @@ class List extends Component {
         <h1>Assessments</h1>
         {
           this.state.assessments.map((v,i) => {
-            return <AssessmentCompletion key={i} assessmentName={v.name} type={v.type} />
+            return <AssessmentCompletion key={i} assessment={v} />
           })
         }
       </Fragment>
