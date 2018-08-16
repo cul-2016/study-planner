@@ -28,7 +28,7 @@
     "eject": "react-scripts eject",
     "postinstall": "npm run build",
     "test:front": "react-scripts test --env=jsdom",
-    "test:back": "tape test/**/*.test.js"
+    "test:back": "tape test/runner.js"
   },
   "proxy": "http://localhost:5000"
 }

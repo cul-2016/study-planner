@@ -1,20 +1,16 @@
 const AWS = require('aws-sdk');
-const moment = require('moment');
 
 const getTarget = require('../helpers/getTarget.js');
+const parsePayload = require('../helpers/parsePayload.js');
+const getCurrentWeek = require('../helpers/getCurrentWeek.js');
 
 const ep = new AWS.Endpoint(process.env.DYNAMO_ENDPOINT);
 const dynamoDB = new AWS.DynamoDB({region: 'eu-west-2', endpoint: ep});
 
-
 async function add(request, h) {
-  const payload = typeof request.payload === "string"
-    ? JSON.parse(request.payload)
-    : request.payload;
+  const {user_id, name, priority, date, type, schedule} = parsePayload(request.payload);
 
-  const {user_id, name, priority, date, type} = payload;
-
-  if (!user_id || !name || !priority || !date || !type) {
+  if (!user_id || !name || !priority || !date || !type || !schedule) {
     return new Error("missing required params");
   }
 
@@ -28,7 +24,10 @@ async function add(request, h) {
   };
 
   params.Weeks.M[getCurrentWeek()] = {
-    M: { 'Target': { N: `${getTarget()}`}, 'ElapsedTime': { N: '0' } } // TODO: Use algorithm to determine target
+    M: {
+      'Target': { N: `${getTarget(schedule)}`},
+      'ElapsedTime': { N: '0' },
+    }
   }
 
   return await dynamoDB.putItem({
@@ -76,11 +75,7 @@ async function list(request, h) {
 }
 
 async function logTime(request, h) {
-  const payload = typeof request.payload === "string"
-    ? JSON.parse(request.payload)
-    : request.payload;
-
-  const {user_id, name, elapsed_time} = payload;
+  const {user_id, name, elapsed_time} = parsePayload(request.payload);
 
   const params = {
     Key: {
@@ -105,15 +100,6 @@ async function logTime(request, h) {
     console.log(err);
     return err
   });
-}
-
-/*
-Returns the date of the Monday of the current week
-*/
-function getCurrentWeek() {
-  const currentWeek = moment().startOf('isoweek');
-
-  return `${currentWeek.year()}-${currentWeek.month() + 1}-${currentWeek.date()}`
 }
 
 module.exports = {

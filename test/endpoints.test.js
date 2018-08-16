@@ -1,9 +1,6 @@
 const AWS = require('aws-sdk-mock');
 const test = require('tape');
 
-AWS.mock('DynamoDB', 'putItem', Promise.resolve());
-AWS.mock('DynamoDB', 'query', Promise.resolve({Items: [{Name: {S: "test"}, Type: {S:"coursework"}}]}));
-
 const server = require('../server/server.js');
 
 const endpoints = [
@@ -12,11 +9,12 @@ const endpoints = [
     path: '/assessment',
     payload: {
       valid: {
-        user_id: "TEST",
-        name: "test assessment",
-        priority: "1",
-        date: "2018-09-09",
-        type: "exam"
+        user_id: 'TEST',
+        name: 'test assessment',
+        priority: '1',
+        date: '2018-09-09',
+        type: 'exam',
+        schedule: 5
       },
       invalid: {}
     }
@@ -24,7 +22,22 @@ const endpoints = [
   {
     method: 'GET',
     path: '/assessment'
-  }
+  },
+  {
+    method: 'POST',
+    path: '/schedule',
+    payload: {
+      valid: {
+        user_id: 'TEST',
+        schedule: 5
+      },
+      invalid: {}
+    }
+  },
+  {
+    method: 'GET',
+    path: '/schedule'
+  },
 ]
 
 endpoints.forEach(e => {
@@ -66,10 +79,4 @@ endpoints.forEach(e => {
       .catch(err => t.fail(err));
     });
   }
-});
-
-test('after - unmock AWS', function (t) {
-  AWS.restore('DynamoDB');
-  server.stop();
-  t.end();
 });

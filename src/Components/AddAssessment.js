@@ -28,7 +28,10 @@ class AddAssessment extends Component {
   addAssessment = () => {
     let init = {
       method: 'POST',
-      body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
+      body: JSON.stringify(Object.assign({}, this.state, {
+        user_id: "TEST", // TODO: replace with real user id
+        schedule: this.props.location.state.scheduledTime
+      }))
     };
 
     handleFetch(`/assessment`, init)
