@@ -5,18 +5,38 @@ import AddAssessment from './Components/AddAssessment.js';
 import List from './Components/List.js';
 import Details from './Components/Details.js';
 import Timer from './Components/Timer.js';
+import Login from './Components/Login.js';
 
 class App extends Component {
+  state = {
+    loggedIn: false
+  }
+
+  componentDidMount = () => {
+    this.setState({loggedIn: this.isLoggedIn()});
+  }
+
+  isLoggedIn = () => {
+    return document.cookie.indexOf("token") !== -1;
+  }
+
   render () {
     return (
-      <Switch>
-        <div className="container">
-          <Route exact path="/" component={Home}/>
-          <Route path="/add-assessment" component={AddAssessment}/>
-          <Route path="/details/:assessment" component={Details} />
-          <Route path="/timer/:assessment" component={Timer} />
-        </div>
-      </Switch>
+      <div className="container">
+        <Switch>
+          {!this.state.loggedIn &&
+            <Fragment>
+              <Route path="/" component={Login} />
+            </Fragment>
+          }
+          <Fragment>
+            <Route exact path="/" component={Home} />
+            <Route path="/add-assessment" component={AddAssessment} />
+            <Route path="/details/:assessment" component={Details} />
+            <Route path="/timer/:assessment" component={Timer} />
+          </Fragment>
+        </Switch>
+      </div>
     )
   }
 }

@@ -37,5 +37,10 @@ module.exports = [
     method: 'GET',
     path: '/schedule',
     handler: handlers.week.getSchedule
+  },
+  {
+    method: 'POST',
+    path: '/login',
+    handler: handlers.auth.login
   }
 ]
