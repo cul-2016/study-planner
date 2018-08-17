@@ -13,6 +13,10 @@ class App extends Component {
   }
 
   componentDidMount = () => {
+    this.onLogin();
+  }
+
+  onLogin = () => {
     this.setState({loggedIn: this.isLoggedIn()});
   }
 
@@ -26,7 +30,7 @@ class App extends Component {
         <Switch>
           {!this.state.loggedIn &&
             <Fragment>
-              <Route path="/" component={Login} />
+              <Route path="/" render={() => <Login onLogin={this.onLogin} />} />
             </Fragment>
           }
           <Fragment>

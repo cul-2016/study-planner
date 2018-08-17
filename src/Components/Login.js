@@ -24,7 +24,7 @@ class Login extends Component {
       body: JSON.stringify(this.state)
     };
     handleFetch('/login', init)
-    .then(() => this.props.history.push('/'))
+    .then(() => this.props.onLogin())
   }
 
   render() {

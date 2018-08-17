@@ -1,7 +1,10 @@
 const AWS = require('aws-sdk-mock');
 const test = require('tape');
+const jwt = require('jsonwebtoken');
 
 const server = require('../server/server.js');
+
+const token = jwt.sign({user_details: {user_id: 1}}, process.env.JWT_SECRET);
 
 const endpoints = [
   {
@@ -46,7 +49,8 @@ endpoints.forEach(e => {
 
     let options = {
       method: e.method,
-      url: e.path
+      url: e.path,
+      headers: { Authorization: token, cookie: 'token=' + token },
     }
 
     if (e.payload) {
@@ -69,7 +73,8 @@ endpoints.forEach(e => {
       let options = {
         method: e.method,
         url: e.path,
-        payload: e.payload.invalid
+        payload: e.payload.invalid,
+        headers: { Authorization: token, cookie: 'token=' + token },
       }
 
       server.inject(options)
@@ -79,4 +84,22 @@ endpoints.forEach(e => {
       .catch(err => t.fail(err));
     });
   }
+});
+
+endpoints.forEach(e => {
+  test(`Unauthorised Endpoint test - ${e.method} ${e.path}`, function (t) {
+    t.plan(1);
+
+    let options = {
+      method: e.method,
+      url: e.path,
+      payload: e.payload ? e.payload.valid : {},
+    }
+
+    server.inject(options)
+    .then(res => {
+      t.notEqual(res.statusCode, 200, `${e.method} - ${e.path}`);
+    })
+    .catch(err => t.fail(err));
+  });
 });
