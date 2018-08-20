@@ -15,7 +15,7 @@ class List extends Component {
   componentDidMount() {
     handleFetch(`/assessment`)
     .then(result => {
-      this.setState({assessments: result.assessments});
+      this.setState({assessments: result.assessments || []});
     })
   }
 
