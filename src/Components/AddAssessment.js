@@ -33,21 +33,20 @@ class AddAssessment extends Component {
 
     handleFetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
     .then(() => {
-      this.props.history.replace("/list-assessments")
+      this.props.history.replace("/")
     })
   }
 
   render() {
     return (
       <div>
-        <Link to="/">
-          <button>{"<- Back"}</button>
-        </Link>
+        <button className="button back-button" onClick={this.props.history.goBack}>{"<- Back"}</button>
         <h1>Add Assessment</h1>
         <h2>Name</h2>
         <input
           type="text"
           name="name"
+          className="assessment-name-input"
           placeholder="Assessment Name"
           onChange={this.onChange}
         />
@@ -58,22 +57,24 @@ class AddAssessment extends Component {
           focused={this.state.focused}
           onFocusChange={({ focused }) => this.setState({ focused })}
           id="datepicker"
-          numberOfMonths={3}
+          numberOfMonths={1}
           displayFormat="DD/MM/YYYY"
         />
         <h2>Type of Assessment</h2>
         <RadioGroup onChange={ selected => this.setState({type: selected}) } horizontal>
           {assessmentTypes.map((v, i) => {
-            return <RadioButton value={v.toLowerCase()} key={i}>{v}</RadioButton>
+            return <RadioButton pointColor="#2574A9" value={v.toLowerCase()} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
         <h2>Priority</h2>
-        <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal>
+        <RadioGroup onChange={ selected => this.setState({priority: selected}) } horizontal={false}>
           {priorities.map((v, i) => {
-            return <RadioButton value={`${i+1}`} key={i}>{v}</RadioButton>
+            return <RadioButton pointColor="#2574A9" value={`${i+1}`} key={i}>{v}</RadioButton>
           })}
         </RadioGroup>
-        <button onClick={this.addAssessment}>Add Assessment</button>
+        <div className="tc">
+          <button className="button" onClick={this.addAssessment}>Add Assessment</button>
+        </div>
       </div>
     )
   }

@@ -22,10 +22,7 @@ class List extends Component {
   render() {
     return (
       <Fragment>
-        <Link to="/">
-          <button>{"<- Back"}</button>
-        </Link>
-        <h1>Assessments</h1>
+        <h2>Assessment Targets</h2>
         {
           this.state.assessments.map((v,i) => {
             return <AssessmentCompletion key={i} assessment={v} />

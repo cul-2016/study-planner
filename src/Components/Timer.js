@@ -11,6 +11,10 @@ class Timer extends Component {
     }
   }
 
+  componentWillUnmount = () => {
+    clearInterval(this.timer);
+  }
+
   renderTime = (ms) => {
     const minutes = this.padWithZero(Math.floor((ms / (1000*60)) % 60));
     const seconds = this.padWithZero(Math.floor((ms / 1000) % 60));
@@ -41,27 +45,30 @@ class Timer extends Component {
   render() {
     return (
       <Fragment>
-        <div>{this.assessment.name} {this.assessment.type}</div>
-        <div>{this.renderTime(this.state.timeRemaining)}</div>
-        {
-          !this.state.started &&
-          <button onClick={() => this.setState({started: true}, () => this.startTimer())}>
-            Start Studying
-          </button>
-        }
-        {
-          this.state.started &&
-          <button onClick={() => {
-            this.setState(
-              (prevState) => {
-                return {paused: !prevState.paused}
-              },
-              () => this.pauseTimer()
-            )
-          }}>
-            {this.state.paused ? "Resume" : "Pause"}
-          </button>
-        }
+        <button className="button back-button" onClick={this.props.history.goBack}>{"<- Back"}</button>
+        <h1>{this.assessment.name} {this.assessment.type}</h1>
+        <div className="timer">{this.renderTime(this.state.timeRemaining)}</div>
+        <div className="tc">
+          {
+            !this.state.started &&
+            <button className="button" onClick={() => this.setState({started: true}, () => this.startTimer())}>
+              Start Studying
+            </button>
+          }
+          {
+            this.state.started &&
+            <button className="button" onClick={() => {
+              this.setState(
+                (prevState) => {
+                  return {paused: !prevState.paused}
+                },
+                () => this.pauseTimer()
+              )
+            }}>
+              {this.state.paused ? "Resume" : "Pause"}
+            </button>
+          }
+        </div>
       </Fragment>
     )
   }
