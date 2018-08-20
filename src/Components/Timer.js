@@ -2,6 +2,12 @@ import React, { Component, Fragment } from 'react';
 import handleFetch from '../helpers/handleFetch.js';
 
 const initialTime = 30 * 60 * 1000; // Set timer to 30 minutes
+const browserVisibilityEvents = [
+  "visibilitychange",
+  "webkitvisibilitychange",
+  "mozvisibilitychange",
+  "msvisibilitychange"
+];
 
 class Timer extends Component {
   constructor(props) {
@@ -10,12 +16,35 @@ class Timer extends Component {
     this.state = {
       timeRemaining: initialTime,
       started: false,
-      paused: false
+      paused: false,
+      hiddenTime: 0,
+      finished: false
     }
   }
 
+  componentDidMount = () => {
+    browserVisibilityEvents.forEach(e => {
+      document.addEventListener(e, this.onVisibilityChange);
+    });
+  }
+
+
   componentWillUnmount = () => {
     clearInterval(this.timer);
+  }
+
+  onVisibilityChange = (e) => {
+    if (e.target.visibilityState === "hidden") {
+      clearInterval(this.timer);
+      this.setState({hiddenTime: Date.now()});
+    } else if (e.target.visibilityState === "visible") {
+      this.setState((oldState) => {
+        const timeRemaining = oldState.timeRemaining - (Date.now() - oldState.hiddenTime);
+        return {
+          timeRemaining: timeRemaining > 0 ? timeRemaining : 0
+        }
+      }, () => this.startTimer());
+    }
   }
 
   renderTime = (ms) => {
@@ -41,7 +70,11 @@ class Timer extends Component {
 
   tick = () => {
     this.setState((prevState) => {
-      return {timeRemaining: prevState.timeRemaining - 100};
+      if (prevState.timeRemaining > 0) {
+        return {timeRemaining: prevState.timeRemaining - 100};
+      } else {
+        return {timeRemaining: 0, finished: true};
+      }
     });
   }
 
