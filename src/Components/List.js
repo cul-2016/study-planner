@@ -13,9 +13,9 @@ class List extends Component {
   }
 
   componentDidMount() {
-    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`)
+    fetch(`/assessment`)
     .then(result => {
-      this.setState({assessments: result.assessments});
+      this.setState({assessments: result.assessments || []});
     })
   }
 

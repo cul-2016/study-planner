@@ -29,6 +29,7 @@ async function add(request, h) {
     return {ok: true};
   })
   .catch(err => {
+    console.log(err);
     return err
   });
 }
@@ -54,6 +55,7 @@ async function list(request, h) {
    })};
  })
  .catch(err => {
+   console.log(err);
    return err
  });
 }
