@@ -84,7 +84,7 @@ async function logTime(request, h) {
 
   const { user_details: { user_id } } = await jwt.verify(request.state.token, process.env.JWT_SECRET);
 
-  const params = {
+  let params = {
     Key: {
       "Name": { S: name },
       "UserId": { S: `${user_id}` }
@@ -103,9 +103,27 @@ async function logTime(request, h) {
   .then(res => {
     return {ok: true}
   })
-  .catch(err => {
-    console.log(err);
-    return err
+  .catch(async err => {
+    /* If this week doesn't exist yet in the database it will error,
+    so we add the week in here */
+    params.UpdateExpression = 'SET Weeks.#WEEK = :w'
+    params.ExpressionAttributeValues = {
+      ':w': {
+        M : {
+          'Target': { N: `${getTarget()}`},
+          'ElapsedTime': { N: elapsed_time }
+        }
+      }
+    }
+
+    return await dynamoDB.updateItem(params).promise()
+    .then(res => {
+      return {ok: true}
+    })
+    .catch(err => {
+      console.log(err);
+      return err
+    });
   });
 }
 

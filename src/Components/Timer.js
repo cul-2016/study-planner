@@ -3,7 +3,6 @@ import handleFetch from '../helpers/handleFetch.js';
 
 const initialTime = 30 * 60 * 1000; // Set timer to 30 minutes
 const browserVisibilityEvents = [
-  "visibilitychange",
   "webkitvisibilitychange",
   "mozvisibilitychange",
   "msvisibilitychange"
@@ -34,16 +33,17 @@ class Timer extends Component {
   }
 
   onVisibilityChange = (e) => {
-    if (e.target.visibilityState === "hidden") {
-      clearInterval(this.timer);
-      this.setState({hiddenTime: Date.now()});
-    } else if (e.target.visibilityState === "visible") {
-      this.setState((oldState) => {
-        const timeRemaining = oldState.timeRemaining - (Date.now() - oldState.hiddenTime);
-        return {
-          timeRemaining: timeRemaining > 0 ? timeRemaining : 0
-        }
-      }, () => this.startTimer());
+    if (this.state.started) {
+      if (e.target.visibilityState === "hidden") {
+        this.setState({hiddenTime: Date.now()}, () => clearInterval(this.timer));
+      } else if (e.target.visibilityState === "visible") {
+        this.setState((oldState) => {
+          const timeRemaining = oldState.timeRemaining - (Date.now() - oldState.hiddenTime);
+          return {
+            timeRemaining: timeRemaining > 0 ? timeRemaining : 0
+          }
+        }, () => this.startTimer());
+      }
     }
   }
 
@@ -57,7 +57,7 @@ class Timer extends Component {
   padWithZero = (num) => num < 10 ? "0" + num : num;
 
   startTimer = () => {
-    this.timer = setInterval(this.tick, 100)
+    this.timer = setInterval(this.tick, 100);
   }
 
   pauseTimer = () => {
@@ -75,11 +75,26 @@ class Timer extends Component {
       } else {
         return {timeRemaining: 0, finished: true};
       }
+    }, () => {
+      if (this.state.finished) {
+        this.finish();
+      }
     });
   }
 
   elapsedTime = () => {
     return Math.floor((initialTime - this.state.timeRemaining) / (5 * 60 * 1000)) * 5; // Only take 5 minute intervals into account
+  }
+
+  formatElapsedTime = () => {
+    const time = this.elapsedTime();
+    return time === 30 ? "half an hour" : `${time} minutes`;
+  }
+
+  finish = () => {
+    this.setState({finished: true}, () => {
+      clearInterval(this.timer);
+    });
   }
 
   logTime = () => {
@@ -89,7 +104,7 @@ class Timer extends Component {
     }
 
     handleFetch('/log-time', init)
-    .then(() => clearInterval(this.timer))
+    .then(() => this.props.history.push('/'));
   }
 
   render() {
@@ -106,22 +121,30 @@ class Timer extends Component {
             </button>
           }
           {
-            this.state.started &&
-            <button className="button" onClick={() => {
-              this.setState(
-                (prevState) => {
-                  return {paused: !prevState.paused}
-                },
-                () => this.pauseTimer()
-              )
-            }}>
-              {this.state.paused ? "Resume" : "Pause"}
-            </button>
+            this.state.started && !this.state.finished &&
+            <Fragment>
+              <button className="button" onClick={() => {
+                this.setState(
+                  (prevState) => {
+                    return {paused: !prevState.paused}
+                  },
+                  () => this.pauseTimer()
+                )
+              }}>
+                {this.state.paused ? "Resume" : "Pause"}
+              </button>
+              <button className="button" onClick={this.finish}>
+                Finish
+              </button>
+            </Fragment>
           }
-          <button className="button" onClick={this.logTime}>
-            Finish
-          </button>
         </div>
+        {this.state.finished &&
+          <div className="tc">
+            <div className="mb1">{`Well done - you're ${this.formatElapsedTime()} closer to your goal! Have a quick break now and come back for another 30 minutes`}</div>
+            <button className="button" onClick={this.logTime}>Bank progress</button>
+          </div>
+        }
       </Fragment>
     )
   }
