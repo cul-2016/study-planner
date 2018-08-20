@@ -30,10 +30,9 @@ class AddAssessment extends Component {
       method: 'POST',
       body: JSON.stringify(Object.assign({}, this.state, {user_id: "TEST"})) // TODO: replace with real user id
     };
-    handleFetch(`${process.env.REACT_APP_API_URL}/assessment`, init)
-    .then(() => {
-      this.props.history.replace("/")
-    })
+
+    handleFetch(`/assessment`, init)
+    .then(() => this.props.history.replace("/"))
   }
 
   render() {

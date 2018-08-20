@@ -13,7 +13,7 @@ class List extends Component {
   }
 
   componentDidMount() {
-    fetch(`/assessment`)
+    handleFetch(`/assessment`)
     .then(result => {
       this.setState({assessments: result.assessments || []});
     })

@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
+import handleFetch from '../helpers/handleFetch.js';
+
+const initialTime = 30 * 60 * 1000; // Set timer to 30 minutes
 
 class Timer extends Component {
   constructor(props) {
     super(props);
     this.assessment = this.props.location.state;
     this.state = {
-      timeRemaining: 30 * 60 * 1000,
+      timeRemaining: initialTime,
       started: false,
       paused: false
     }
@@ -42,6 +45,20 @@ class Timer extends Component {
     });
   }
 
+  elapsedTime = () => {
+    return Math.floor((initialTime - this.state.timeRemaining) / (5 * 60 * 1000)) * 5; // Only take 5 minute intervals into account
+  }
+
+  logTime = () => {
+    let init = {
+      method: 'POST',
+      body: JSON.stringify({name: this.assessment.name, user_id: 'TEST', elapsed_time: `${this.elapsedTime()}`})
+    }
+
+    handleFetch('/log-time', init)
+    .then(() => clearInterval(this.timer))
+  }
+
   render() {
     return (
       <Fragment>
@@ -68,6 +85,9 @@ class Timer extends Component {
               {this.state.paused ? "Resume" : "Pause"}
             </button>
           }
+          <button className="button" onClick={this.logTime}>
+            Finish
+          </button>
         </div>
       </Fragment>
     )

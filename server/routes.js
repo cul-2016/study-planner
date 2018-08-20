@@ -22,5 +22,10 @@ module.exports = [
     method: 'GET',
     path: '/assessment',
     handler: handlers.assessment.list
+  },
+  {
+    method: 'POST',
+    path: '/log-time',
+    handler: handlers.assessment.logTime
   }
 ]
