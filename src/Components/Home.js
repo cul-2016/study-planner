@@ -2,10 +2,42 @@ import React, { Component, Fragment } from 'react';
 import  { Link } from 'react-router-dom';
 
 import List from './List.js';
+import handleFetch from '../helpers/handleFetch.js';
 
 class Home extends Component {
   state = {
     scheduledTime: 6
+  }
+
+  componentDidMount = () => {
+    handleFetch(`/schedule`)
+    .then(result => {
+      this.setState({scheduledTime: parseInt(result.schedule, 10) / 60});
+    })
+  }
+
+  onChange = (e) => {
+    e.preventDefault();
+
+    let newState = {};
+    newState[e.target.name] = e.target.value;
+
+    clearInterval(this.schedule);
+
+    this.setState(newState, () => {
+      this.schedule = setTimeout(() => {
+        this.updateSchedule();
+      }, 1000); // Wait one second so we don't make lots of requests if input changes quickly
+    });
+  }
+
+  updateSchedule = () => {
+    let init = {
+      method: 'POST',
+      body: JSON.stringify({schedule: this.state.scheduledTime})
+    }
+
+    handleFetch('/schedule', init)
   }
 
   render() {
@@ -18,10 +50,11 @@ class Home extends Component {
           className="schedule-input"
           type="number"
           value={this.state.scheduledTime}
-          onChange={(e) => this.setState({scheduledTime: e.target.value})}
+          name="scheduledTime"
+          onChange={this.onChange}
         /> hours this week</p>
         <div className="tc">
-          <Link to="/add-assessment">
+          <Link to={{pathname: "/add-assessment", state: this.state}}>
             <button className="button">Add assessment</button>
           </Link>
         </div>

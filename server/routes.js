@@ -27,5 +27,15 @@ module.exports = [
     method: 'POST',
     path: '/log-time',
     handler: handlers.assessment.logTime
+  },
+  {
+    method: 'POST',
+    path: '/schedule',
+    handler: handlers.week.updateSchedule
+  },
+  {
+    method: 'GET',
+    path: '/schedule',
+    handler: handlers.week.getSchedule
   }
 ]
