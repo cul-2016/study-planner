@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-sdk": "^2.289.0",
+    "bcrypt": "^3.0.0",
     "hapi": "^17.5.3",
     "inert": "^5.1.0",
+    "jsonwebtoken": "^8.3.0",
     "moment": "^2.22.2",
+    "pg": "^7.4.3",
     "react": "^16.4.2",
     "react-dates": "^17.1.1",
     "react-dom": "^16.4.2",
     "react-radio-buttons": "^1.2.2",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "uid": "0.0.2"
   },
   "devDependencies": {
     "concurrently": "^3.6.1",

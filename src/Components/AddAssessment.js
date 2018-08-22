@@ -29,7 +29,6 @@ class AddAssessment extends Component {
     let init = {
       method: 'POST',
       body: JSON.stringify(Object.assign({}, this.state, {
-        user_id: "TEST", // TODO: replace with real user id
         schedule: this.props.location.state.scheduledTime
       }))
     };
