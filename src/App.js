@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Home from './Components/Home.js';
 import AddAssessment from './Components/AddAssessment.js';
-import List from './Components/List.js';
 import Details from './Components/Details.js';
 import Timer from './Components/Timer.js';
 import Login from './Components/Login.js';

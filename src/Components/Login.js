@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import handleFetch from '../helpers/handleFetch.js';
 
 class Login extends Component {
@@ -30,15 +30,18 @@ class Login extends Component {
   render() {
     return (
       <form>
+        <h2>Sign in with your Quodl credentials</h2>
         <div>
           <label htmlFor="login-email">Email</label>
-          <input type="email" id="login-email" name="email" onChange={this.onChange} />
+          <input className="login-input" type="email" id="login-email" name="email" onChange={this.onChange} />
         </div>
-        <div>
+        <div className="mb1">
           <label htmlFor="login-password">Password</label>
-          <input type="password" id="login-password" name="password" onChange={this.onChange} />
+          <input className="login-input" type="password" id="login-password" name="password" onChange={this.onChange} />
         </div>
-        <button className="button" onClick={this.login}>Log in</button>
+        <div className="tc">
+          <button className="button" onClick={this.login}>Log in</button>
+        </div>
       </form>
     )
   }
